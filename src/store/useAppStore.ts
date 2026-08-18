@@ -11,9 +11,6 @@ interface AppState {
 
   language: string;
   setLanguage: (lang: string) => void;
-  
-  isAuthenticated: boolean;
-  setAuthenticated: (value: boolean) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -27,9 +24,6 @@ export const useAppStore = create<AppState>()(
 
       language: 'en',
       setLanguage: (lang) => set({ language: lang }),
-      
-      isAuthenticated: false,
-      setAuthenticated: (value) => set({ isAuthenticated: value }),
     }),
     {
       name: 'app-storage',

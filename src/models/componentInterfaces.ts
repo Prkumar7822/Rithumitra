@@ -11,6 +11,7 @@ export interface ButtonProps {
   onPress: () => void;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  disabled?: boolean;
 }
 
 export interface ScreenWrapperProps {

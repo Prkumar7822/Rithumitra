@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { useAuthStore } from '../store/useAuthStore';
 import { COLORS } from '../constants/colors';
 import Header from '../components/common/Header';
 import Button from '../components/common/Button';
 
 const LoginScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [mobileNumber, setMobileNumber] = useState('');
+  const { requestOtp, isLoading, error } = useAuthStore();
+  
+  const isButtonDisabled = mobileNumber.length !== 10 || isLoading;
 
-  const handleGetOTP = () => {
-    // We will implement API logic here later
-    console.log('Get OTP for:', mobileNumber);
+  const handleGetOTP = async () => {
+    if (mobileNumber.length !== 10) return;
+    const success = await requestOtp(mobileNumber);
+    if (success) {
+      navigation.navigate('VerifyOTP', { mobileNumber });
+    }
   };
 
   return (
@@ -35,15 +46,21 @@ const LoginScreen = () => {
             keyboardType="numeric"
             maxLength={10}
             value={mobileNumber}
-            onChangeText={setMobileNumber}
+            onChangeText={(text) => {
+              // Ensure only numbers are entered
+              const numericValue = text.replace(/[^0-9]/g, '');
+              setMobileNumber(numericValue);
+            }}
           />
         </View>
 
         <View style={styles.buttonContainer}>
+          {error && <Text style={styles.errorText}>{error}</Text>}
           <Button 
-            title="Get OTP" 
+            title={isLoading ? "Loading..." : "Get OTP"} 
             onPress={handleGetOTP} 
             style={styles.button}
+            disabled={isButtonDisabled}
           />
         </View>
       </ScrollView>
@@ -96,12 +113,18 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     marginBottom: 40,
   },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
   button: {
     width: '100%',
     paddingVertical: 16,
     borderRadius: 8,
-    backgroundColor: '#0A3B1F', // Using the dark green from the Language screen
+    backgroundColor: '#0A3B1F', 
   },
 });
 
 export default LoginScreen;
+

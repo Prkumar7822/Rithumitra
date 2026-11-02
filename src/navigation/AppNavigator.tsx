@@ -7,7 +7,7 @@ import OnboardingScreen from '../screens/OnboardingScreen';
 import LanguageSelectionScreen from '../screens/LanguageSelectionScreen';
 import LoginScreen from '../screens/LoginScreen';
 import VerifyOTPScreen from '../screens/VerifyOTPScreen';
-import DashboardScreen from '../screens/DashboardScreen';
+import MainTabNavigator from './MainTabNavigator';
 import ProfileSetupScreen from '../screens/ProfileSetupScreen';
 import { RootStackParamList } from './navigationTypes';
 
@@ -39,7 +39,7 @@ const AppNavigator = () => {
           <Stack.Screen name="LanguageSelection" component={LanguageSelectionScreen} />
         ) : isAuthenticated ? (
           isProfileComplete ? (
-            <Stack.Screen name="Dashboard" component={DashboardScreen} />
+            <Stack.Screen name="MainTabs" component={MainTabNavigator} />
           ) : (
             <Stack.Screen name="ProfileSetup" component={ProfileSetupScreen} />
           )
@@ -55,3 +55,4 @@ const AppNavigator = () => {
 };
 
 export default AppNavigator;
+

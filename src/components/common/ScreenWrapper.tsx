@@ -1,15 +1,19 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, useWindowDimensions } from 'react-native';
 import { ScreenWrapperProps } from '../../models/componentInterfaces';
+import TopLeaf from '../../images/Top_leaf.svg';
+import BottomLeaf from '../../images/Bottom_leaf.svg';
 
 const ScreenWrapper: React.FC<ScreenWrapperProps> = ({ children, style }) => {
+  const { width } = useWindowDimensions();
+  const leafSize = width * 0.45; // 45% of screen width
+
   return (
     <View style={[styles.container, style]}>
       {/* Top Left Leaf Decoration */}
-      <Image 
-        source={require('../../images/c414a4292fe2f48e4b73873bd52019ea967f9ec5.png')} 
-        style={styles.topLeftLeaf} 
-      />
+      <View style={styles.topLeftLeafContainer}>
+        <TopLeaf width={leafSize} height={leafSize} />
+      </View>
       
       {/* Main Content */}
       <View style={styles.content}>
@@ -17,10 +21,9 @@ const ScreenWrapper: React.FC<ScreenWrapperProps> = ({ children, style }) => {
       </View>
 
       {/* Bottom Right Leaf Decoration */}
-      <Image 
-        source={require('../../images/448f768d684768b901c18815cb7abd1d33570e3b.png')} 
-        style={styles.bottomRightLeaf} 
-      />
+      <View style={styles.bottomRightLeafContainer}>
+        <BottomLeaf width={leafSize} height={leafSize} />
+      </View>
     </View>
   );
 };
@@ -34,28 +37,19 @@ const styles = StyleSheet.create({
     flex: 1,
     zIndex: 1,
   },
-  topLeftLeaf: {
+  topLeftLeafContainer: {
     position: 'absolute',
     top: -20,
     left: -20,
-    width: 180,
-    height: 180,
-    resizeMode: 'contain',
-    transform: [{ scaleY: -1 }], // Flipping only vertically makes it point downwards and inwards
     zIndex: 0,
+    transform: [{ scaleY: -1 }], // Flipping only vertically makes it point downwards and inwards
   },
-  bottomRightLeaf: {
+  bottomRightLeafContainer: {
     position: 'absolute',
     bottom: -20,
     right: -20,
-    width: 180,
-    height: 180,
-    resizeMode: 'contain',
     zIndex: 0,
   },
 });
 
 export default ScreenWrapper;
-
-
-

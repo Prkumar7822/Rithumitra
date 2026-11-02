@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import { OnboardingItem } from '../../models/types';
 import { COLORS } from '../../constants/colors';
 
@@ -8,17 +8,23 @@ interface Props {
 }
 
 const OnboardingSlide: React.FC<Props> = ({ item }) => {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
   // The first slide (logo only) doesn't have a description, so we can adjust styling
   const isSplash = item.id === '1';
 
+  const SvgImage = item.image;
+
+  // Dynamic sizing based on screen dimensions
+  // Ensure the logo on the first screen isn't cut off by providing enough width and height
+  const imageWidth = isSplash ? width * 0.7 : width * 0.85;
+  const imageHeight = height * 0.45; // Take up explicit height rather than flex stretching
+
   return (
     <View style={[styles.container, { width }]}>
-      <Image 
-        source={item.image} 
-        style={[styles.image, { width: isSplash ? width * 0.6 : width * 0.8, resizeMode: 'contain' }]} 
-      />
+      <View style={[styles.imageContainer, { height: imageHeight, width: width }]}>
+        <SvgImage width={imageWidth} height="100%" />
+      </View>
       
       {!isSplash && (
         <View style={styles.textContainer}>
@@ -36,9 +42,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: '25%', // Push it down slightly from top
   },
-  image: {
-    height: '45%', // Take up explicit height rather than flex stretching
+  imageContainer: {
     justifyContent: 'center',
+    alignItems: 'center',
   },
   textContainer: {
     alignItems: 'center',

@@ -5,13 +5,19 @@ import Button from '../components/common/Button';
 import { COLORS } from '../constants/colors';
 
 const ProfileSetupScreen = () => {
-  const { logout } = useAuthStore();
+  const { logout, completeProfile } = useAuthStore();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile Setup</Text>
       <Text style={styles.subtitle}>Please complete your profile.</Text>
       
+      <Button 
+        title="Complete Profile (Bypass)" 
+        onPress={() => completeProfile()} 
+        style={styles.button}
+      />
+      <View style={{height: 15}} />
       <Button 
         title="Logout" 
         onPress={() => logout()} 

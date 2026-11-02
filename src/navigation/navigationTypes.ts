@@ -4,5 +4,7 @@ export type RootStackParamList = {
   Login: undefined;
   VerifyOTP: { mobileNumber: string };
   ProfileSetup: { farmer: Record<string, any> };
-  Dashboard: { farmer: Record<string, any>; fields: any[] };
+  MainTabs: undefined;
 };
+
+

@@ -20,6 +20,7 @@ interface AuthState {
   checkExistingSession: () => Promise<void>;
   logout: () => Promise<void>;
   clearError: () => void;
+  completeProfile: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -37,6 +38,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   setMobileNumber: (num) => set({ mobileNumber: num }),
   
   clearError: () => set({ error: null }),
+
+  completeProfile: () => set({ isProfileComplete: true }),
 
   requestOtp: async (mobileNumber) => {
     set({ isLoading: true, error: null });
@@ -92,7 +95,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         // Technically, the API doesn't have a /me endpoint to re-fetch the farmer data.
         // In a real app, you'd persist `farmer` data using AsyncStorage or fetch it.
         // For now, we just set authenticated to true so navigation bypasses login.
-        set({ isAuthenticated: true, isLoading: false });
+        set({ isAuthenticated: true, isProfileComplete: true, isLoading: false });
       } else {
         await clearTokens();
         set({ isAuthenticated: false, isLoading: false });
@@ -114,3 +117,5 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
   }
 }));
+
+
